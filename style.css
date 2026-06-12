@@ -36,11 +36,12 @@ body {
 
 .hud-card,
 .board-card {
-  background: var(--panel);
+  /* solid panels — backdrop-filter blur forced the browser to recompute
+     an expensive blur on every canvas frame and stuttered on laptops */
+  background: #0b1021;
   border: 1px solid var(--border);
   border-radius: 24px;
   box-shadow: 0 24px 80px var(--glow);
-  backdrop-filter: blur(18px);
 }
 
 .hud-card {

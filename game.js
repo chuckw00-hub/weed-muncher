@@ -398,7 +398,9 @@ function eatPellet() {
     setMessage(practiceMode ? 'Bong collected.' : 'Bong rip! Ghosts are edible.');
   }
 
-  if ((cell === '.' || cell === 'o') && pelletsRemaining <= 0) {
+  if (cell !== '.' && cell !== 'o') return;   // nothing eaten — skip DOM work
+
+  if (pelletsRemaining <= 0) {
     win = true;
     winTimer = WIN_FLASH_TIME;
     gameStarted = false;
@@ -1377,6 +1379,12 @@ soundToggleBtn?.addEventListener('click', () => {
   localStorage.setItem('mazeMuncherSound', soundOn ? 'on' : 'off');
   if (soundOn) { ensureAudio(); sfxChomp(); }
   updateControlLabels();
+});
+
+// buttons must not keep keyboard focus after a click — otherwise a later
+// Space/Enter press (the start key) re-triggers them and resets the game
+document.addEventListener('click', (event) => {
+  if (event.target instanceof HTMLButtonElement) event.target.blur();
 });
 
 touchButtons.forEach((button) => {

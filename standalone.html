@@ -43,11 +43,12 @@ body {
 
 .hud-card,
 .board-card {
-  background: var(--panel);
+  /* solid panels — backdrop-filter blur forced the browser to recompute
+     an expensive blur on every canvas frame and stuttered on laptops */
+  background: #0b1021;
   border: 1px solid var(--border);
   border-radius: 24px;
   box-shadow: 0 24px 80px var(--glow);
-  backdrop-filter: blur(18px);
 }
 
 .hud-card {
@@ -707,7 +708,9 @@ function eatPellet() {
     setMessage(practiceMode ? 'Bong collected.' : 'Bong rip! Ghosts are edible.');
   }
 
-  if ((cell === '.' || cell === 'o') && pelletsRemaining <= 0) {
+  if (cell !== '.' && cell !== 'o') return;   // nothing eaten — skip DOM work
+
+  if (pelletsRemaining <= 0) {
     win = true;
     winTimer = WIN_FLASH_TIME;
     gameStarted = false;
@@ -1686,6 +1689,12 @@ soundToggleBtn?.addEventListener('click', () => {
   localStorage.setItem('mazeMuncherSound', soundOn ? 'on' : 'off');
   if (soundOn) { ensureAudio(); sfxChomp(); }
   updateControlLabels();
+});
+
+// buttons must not keep keyboard focus after a click — otherwise a later
+// Space/Enter press (the start key) re-triggers them and resets the game
+document.addEventListener('click', (event) => {
+  if (event.target instanceof HTMLButtonElement) event.target.blur();
 });
 
 touchButtons.forEach((button) => {
