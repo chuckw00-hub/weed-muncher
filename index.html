@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maze Muncher</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="game-shell">
+    <section class="hud-card">
+      <div>
+        <p class="eyebrow">Pac-Man-inspired browser game</p>
+        <h1>Maze Muncher</h1>
+        <p class="subcopy">Chomp every tiny bud, dodge the ghosts, and grab the bong to flip the chase.</p>
+      </div>
+      <div class="hud-stats">
+        <div><span>Score</span><strong id="score">0</strong></div>
+        <div><span>Lives</span><strong id="lives">3</strong></div>
+        <div><span>Level</span><strong id="level">1</strong></div>
+      </div>
+    </section>
+
+    <section class="board-card">
+      <canvas id="game" aria-label="Maze Muncher game board"></canvas>
+      <div class="controls">
+        <p id="message">Press an arrow key or tap a direction to start.</p>
+        <div class="buttons">
+          <button id="mode-toggle" class="button-secondary" type="button">Mode: Normal</button>
+          <button id="speed-toggle" class="button-secondary" type="button">Ghosts: Slow</button>
+          <button id="sound-toggle" class="button-secondary" type="button">Sound: On</button>
+          <button id="restart" type="button">Restart</button>
+        </div>
+      </div>
+
+      <div class="touch-controls" aria-label="Touch controls">
+        <button class="touch-btn touch-up" type="button" data-direction="up" aria-label="Move up">▲</button>
+        <button class="touch-btn touch-left" type="button" data-direction="left" aria-label="Move left">◀</button>
+        <button class="touch-btn touch-center" type="button" id="touch-start" aria-label="Start game">✿</button>
+        <button class="touch-btn touch-right" type="button" data-direction="right" aria-label="Move right">▶</button>
+        <button class="touch-btn touch-down" type="button" data-direction="down" aria-label="Move down">▼</button>
+      </div>
+
+      <p class="instructions">Controls: arrow keys, WASD, swipe the board, or the on-screen touch pad. Practice mode removes ghosts. When ghosts are on, they start slowed down. Your little yellow wanderer rocks a red headband and round shades.</p>
+    </section>
+  </main>
+
+  <script src="./game.js"></script>
+</body>
+</html>
