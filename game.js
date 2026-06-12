@@ -647,9 +647,16 @@ let pelletSprite = null;
 let powerSprite = null;
 
 function sizeCanvas() {
-  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
-  canvas.width = Math.round(cols * TILE * dpr);
-  canvas.height = Math.round(rows * TILE * dpr);
+  // mobile browsers fire resize constantly (URL bar, scroll bounce);
+  // reassigning canvas.width clears the canvas, so bail unless the
+  // backing size actually changed
+  const newDpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = Math.round(cols * TILE * newDpr);
+  const h = Math.round(rows * TILE * newDpr);
+  if (newDpr === dpr && canvas.width === w && canvas.height === h && pelletSprite) return;
+  dpr = newDpr;
+  canvas.width = w;
+  canvas.height = h;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   pelletSprite = makeBudSprite(false);
   powerSprite = makeBudSprite(true);
@@ -1333,8 +1340,12 @@ canvas.addEventListener('pointermove', (event) => {
   if (!swipeAnchor) return;
   const dx = event.clientX - swipeAnchor.x;
   const dy = event.clientY - swipeAnchor.y;
-  if (Math.hypot(dx, dy) < 18) return;
-  const direction = Math.abs(dx) > Math.abs(dy)
+  const adx = Math.abs(dx);
+  const ady = Math.abs(dy);
+  if (Math.max(adx, ady) < 24) return;
+  // ignore ambiguous diagonals so a drifting drag doesn't zigzag him
+  if (Math.max(adx, ady) < Math.min(adx, ady) * 1.4) return;
+  const direction = adx > ady
     ? (dx > 0 ? 'right' : 'left')
     : (dy > 0 ? 'down' : 'up');
   swipeAnchor = { x: event.clientX, y: event.clientY };
